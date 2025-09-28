@@ -1,0 +1,184 @@
+/* FeedbackForm specific styles */
+.feedback-form {
+  /* Inherits most styles from App.css */
+}
+
+/* Additional specific styles if needed */
+.rating-chipset label.selected {
+  background: linear-gradient(135deg, rgba(177, 71, 60, 0.12), rgba(248, 132, 86, 0.18));
+  border-color: rgba(177, 71, 60, 0.45);
+  color: var(--accent-deep);
+  box-shadow: 0 16px 34px rgba(177, 71, 60, 0.16);
+}
+
+.dietary-toggle label.selected {
+  border-color: rgba(177, 71, 60, 0.7);
+  box-shadow: 0 16px 36px rgba(177, 71, 60, 0.12);
+}
+
+/* Rating Summary Section - Bottom of Page */
+.rating-summary {
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 5vw, 40px);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  margin-top: 28px;
+}
+
+.rating-summary__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.rating-summary__header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 32px);
+  font-weight: 600;
+  color: #21150f;
+  margin: 0 0 8px 0;
+}
+
+.rating-summary__header p {
+  font-size: 18px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.rating-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.rating-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-md);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-inner);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.rating-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), var(--shadow-inner);
+}
+
+.rating-card--average {
+  background: linear-gradient(135deg, rgba(177, 71, 60, 0.08), rgba(248, 132, 86, 0.12));
+  border-color: rgba(177, 71, 60, 0.2);
+}
+
+.rating-card__value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+}
+
+.rating-card--average .rating-card__value {
+  color: var(--accent-deep);
+}
+
+.rating-card__value span {
+  font-size: 22px;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+.rating-card__label {
+  font-size: 16px;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Mobile Responsive for Rating Summary */
+@media (max-width: 768px) {
+  .rating-summary {
+    padding: 24px 20px;
+    margin-top: 20px;
+  }
+  
+  .rating-summary__header {
+    margin-bottom: 24px;
+  }
+  
+  .rating-summary__header h2 {
+    font-size: 24px;
+  }
+  
+  .rating-summary__header p {
+    font-size: 16px;
+  }
+  
+  .rating-summary__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .rating-card {
+    padding: 16px 14px;
+  }
+  
+  .rating-card__value {
+    font-size: 28px;
+  }
+  
+  .rating-card__value span {
+    font-size: 18px;
+  }
+  
+  .rating-card__label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rating-summary {
+    padding: 20px 16px;
+    margin-top: 16px;
+  }
+  
+  .rating-summary__grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .rating-card {
+    padding: 14px 12px;
+  }
+  
+  .rating-card__value {
+    font-size: 24px;
+  }
+  
+  .rating-card__value span {
+    font-size: 16px;
+  }
+  
+  .rating-card__label {
+    font-size: 13px;
+  }
+}
+
+/* Toast animation */
+.toast {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

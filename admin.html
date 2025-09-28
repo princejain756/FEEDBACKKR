@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kriedko | Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Admin page minimal styling */
+      body.admin-page {
+        background: #fafafa;
+        color: #2d2320;
+      }
+      
+      .dashboard-shell { width: min(1200px, 100%); margin: 0 auto; display: grid; gap: 24px; }
+      
+      /* Sticky header */
+      .admin-header { 
+        position: sticky; 
+        top: 0; 
+        z-index: 100; 
+        background: #ffffff; 
+        border-radius: var(--radius-lg); 
+        padding: 20px 24px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+        border: 1px solid #e0e0e0; 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        gap: 16px; 
+        margin-bottom: 24px;
+      }
+      
+      .admin-header h1 { margin: 0; font-family: var(--font-display); font-size: clamp(24px, 4vw, 32px); }
+      .admin-token { display: flex; gap: 10px; align-items: center; }
+      .admin-token button { 
+        padding: 10px 14px; 
+        border-radius: 10px; 
+        border: none; 
+        background: #b1473c; 
+        color: #fff; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+      .admin-token button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(177, 71, 60, 0.3);
+      }
+      
+      /* Mobile-optimized stats grid */
+      .stats-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+        gap: 16px; 
+        margin-bottom: 24px;
+      }
+      
+      .stat-card { 
+        background: #ffffff; 
+        border-radius: var(--radius-md); 
+        padding: 18px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        border: 1px solid #e0e0e0; 
+        display: grid; 
+        gap: 6px; 
+        transition: transform 160ms ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      }
+      
+      .stat-card .label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+      .stat-card .value { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--accent); }
+      
+      .submissions { 
+        background: #ffffff; 
+        border-radius: var(--radius-lg); 
+        padding: 16px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+        border: 1px solid #e0e0e0; 
+      }
+      
+      .submissions__head { 
+        display: flex; 
+        gap: 12px; 
+        align-items: center; 
+        justify-content: space-between; 
+        flex-wrap: wrap; 
+        margin-bottom: 16px; 
+      }
+      .submissions__head h2 { margin: 0; font-family: var(--font-display); font-size: 22px; }
+      
+      /* Mobile-optimized table */
+      .table-wrap { 
+        overflow-x: auto; 
+        border-radius: 12px; 
+        border: 1px solid #e0e0e0; 
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      table { 
+        width: 100%; 
+        min-width: 800px;
+        border-collapse: collapse; 
+        background: #ffffff; 
+      }
+      
+      th, td { 
+        padding: 12px 10px; 
+        text-align: left; 
+        border-bottom: 1px solid #e0e0e0; 
+        vertical-align: top; 
+        white-space: nowrap;
+      }
+      
+      th { 
+        background: #f5f5f5; 
+        font-size: 13px; 
+        color: var(--muted); 
+        text-transform: uppercase; 
+        letter-spacing: .08em; 
+        position: sticky; 
+        top: 0; 
+        z-index: 10;
+      }
+      
+      /* Allow text wrapping for content columns */
+      td:nth-child(4), td:nth-child(5), td:nth-child(6) {
+        white-space: normal;
+        max-width: 200px;
+        word-wrap: break-word;
+      }
+      
+      .pill { padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+      .pill--pos { background: rgba(63,138,60,0.12); color: #1f5f1d; }
+      .pill--neu { background: rgba(0,0,0,0.06); color: #4a4a4a; }
+      .pill--neg { background: rgba(177,71,60,0.18); color: var(--accent-deep); }
+      
+      /* Mobile-optimized filter */
+      .filter { 
+        display: flex; 
+        gap: 8px; 
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      
+      .filter input, .filter select { 
+        padding: 8px 10px; 
+        border-radius: 10px; 
+        border: 1px solid #e0e0e0; 
+        font-size: 14px;
+        min-width: 120px;
+        flex: 1;
+        background: #ffffff;
+      }
+      
+      .right { margin-left: auto; }
+      .muted { color: var(--muted); font-size: 12px; }
+      
+      /* Mobile-specific styles */
+      @media (max-width: 768px) {
+        .dashboard-shell {
+          gap: 16px;
+          padding: 0 16px;
+        }
+        
+        .admin-header {
+          padding: 16px 20px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        
+        .admin-header h1 {
+          font-size: 24px;
+        }
+        
+        .admin-token {
+          width: 100%;
+          justify-content: flex-end;
+        }
+        
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        
+        .stat-card {
+          padding: 14px;
+        }
+        
+        .stat-card .value {
+          font-size: 24px;
+        }
+        
+        .submissions {
+          padding: 12px;
+        }
+        
+        .submissions__head {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+        
+        .filter {
+          width: 100%;
+          flex-direction: column;
+        }
+        
+        .filter input, .filter select {
+          min-width: unset;
+          width: 100%;
+        }
+        
+        table {
+          min-width: 600px;
+        }
+        
+        th, td {
+          padding: 8px 6px;
+          font-size: 12px;
+        }
+        
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) {
+          max-width: 150px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .stat-card .value {
+          font-size: 20px;
+        }
+        
+        table {
+          min-width: 500px;
+        }
+        
+        th, td {
+          padding: 6px 4px;
+          font-size: 11px;
+        }
+      }
+    </style>
+  </head>
+  <body class="admin-page">
+    <div class="dashboard-shell">
+      <header class="admin-header">
+        <div>
+          <div class="eyebrow">Kriedko Culinary Collective</div>
+          <h1>Admin Dashboard</h1>
+          <div class="muted">Live insight into guest feedback</div>
+        </div>
+        <div class="admin-token" style="gap:12px;">
+          <button id="exportBtn" style="background: #4a90e2; font-size: 12px; padding: 8px 12px;">Export Data</button>
+          <button id="importBtn" style="background: #7b68ee; font-size: 12px; padding: 8px 12px;">Import Data</button>
+          <button id="clearBtn" style="background: #e74c3c; font-size: 12px; padding: 8px 12px;">Clear All</button>
+          <button id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <section class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="label">Submissions</div>
+          <div class="value" data-stat="count">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Experience Index</div>
+          <div class="value" data-stat="experienceIndex">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Taste</div>
+          <div class="value" data-stat="taste">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Service</div>
+          <div class="value" data-stat="service">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Wait</div>
+          <div class="value" data-stat="wait">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Overall</div>
+          <div class="value" data-stat="overall">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Sentiment</div>
+          <div class="value" data-stat="sentimentMix">—</div>
+          <div class="muted" data-stat="avgSent">—</div>
+        </div>
+      </section>
+
+      <section class="submissions">
+        <div class="submissions__head">
+          <h2>Guest Submissions</h2>
+          <div class="filter right">
+            <input type="text" id="search" placeholder="Search text..." />
+            <select id="sentimentFilter">
+              <option value="">All sentiments</option>
+              <option value="positive">Positive</option>
+              <option value="neutral">Neutral</option>
+              <option value="negative">Negative</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="subsTable">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Meal</th>
+                <th>Ratings (T/S/W/O)</th>
+                <th>Experience</th>
+                <th>Favourite Item</th>
+                <th>Improvements</th>
+                <th>Sentiment</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+    <script src="localStorage.js" defer></script>
+    <script src="admin.js" defer></script>
+  </body>
+  </html>

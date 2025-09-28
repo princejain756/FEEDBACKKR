@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kriedko | Admin Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .login-shell { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+      .login-card { width: min(420px, 92vw); background: var(--surface-elevated); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-soft); border: 1px solid rgba(255,255,255,0.7); display: grid; gap: 18px; }
+      .login-card h1 { margin: 0; font-family: var(--font-display); font-size: 28px; }
+      .login-card .muted { color: var(--muted); font-size: 14px; }
+      .field { display: grid; gap: 8px; }
+      .field input { padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.12); background: rgba(255,255,255,0.9); font-size: 16px; }
+      .actions { display: grid; gap: 10px; }
+      .btn { padding: 14px 16px; border-radius: 999px; border: none; background: linear-gradient(135deg, var(--accent), #f88456); color: #fff; font-weight: 600; cursor: pointer; box-shadow: 0 18px 38px rgba(177,71,60,0.26); }
+      .error { color: var(--accent-deep); background: rgba(177,71,60,0.1); border: 1px solid rgba(177,71,60,0.2); padding: 10px 12px; border-radius: 10px; display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <div class="ambient ambient--two"></div>
+
+    <main class="login-shell">
+      <form class="login-card" id="loginForm">
+        <header>
+          <div class="eyebrow">Kriedko Culinary Collective</div>
+          <h1>Admin Login</h1>
+          <p class="muted">Use your admin credentials to continue.</p>
+        </header>
+        <div class="error" id="errorBox" role="alert">Invalid credentials. Try again.</div>
+        <label class="field">
+          <span>Username</span>
+          <input type="text" name="username" placeholder="admin" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" name="password" placeholder="••••••••" required />
+        </label>
+        <div class="actions">
+          <button class="btn" type="submit">Sign In</button>
+        </div>
+      </form>
+    </main>
+
+    <script src="login.js" defer></script>
+  </body>
+  </html>
+
