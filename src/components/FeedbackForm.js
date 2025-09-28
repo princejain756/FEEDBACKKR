@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { postFeedback } from '../lib/api';
+import { postFeedback, fetchAggregates } from '../lib/api';
 import '../styles/FeedbackForm.css';
 
 const FeedbackForm = () => {
@@ -58,7 +58,28 @@ const FeedbackForm = () => {
     setMetrics(newMetrics);
   };
 
-  const updateAllUserMetrics = () => {
+  const updateAllUserMetrics = async () => {
+    try {
+      // First try to fetch community data from API (Supabase)
+      const apiAggregates = await fetchAggregates();
+      
+      if (apiAggregates && apiAggregates.count > 0) {
+        // Use API data for community ratings
+        const newAllUserMetrics = {
+          taste: apiAggregates.averages.taste ? Number(apiAggregates.averages.taste.toFixed(1)) : null,
+          service: apiAggregates.averages.service ? Number(apiAggregates.averages.service.toFixed(1)) : null,
+          wait: apiAggregates.averages.wait ? Number(apiAggregates.averages.wait.toFixed(1)) : null,
+          overall: apiAggregates.averages.overall ? Number(apiAggregates.averages.overall.toFixed(1)) : null,
+          average: apiAggregates.averages.experienceIndex ? Number(apiAggregates.averages.experienceIndex.toFixed(1)) : null
+        };
+        setAllUserMetrics(newAllUserMetrics);
+        return;
+      }
+    } catch (error) {
+      console.warn('Failed to fetch community data from API, falling back to local data:', error);
+    }
+
+    // Fallback to local storage data
     if (feedbacks.length === 0) {
       setAllUserMetrics({
         taste: null,
@@ -153,8 +174,16 @@ const FeedbackForm = () => {
   useEffect(() => {
     updateProgress();
     updateMetrics();
+  }, [formData]);
+
+  useEffect(() => {
     updateAllUserMetrics();
-  }, [formData, feedbacks]);
+  }, [feedbacks]);
+
+  // Load community ratings on component mount
+  useEffect(() => {
+    updateAllUserMetrics();
+  }, []);
 
   const RatingChip = ({ name, value, label, hint }) => (
     <div className="rating-grid">
