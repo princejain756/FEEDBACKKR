@@ -29,7 +29,8 @@ module.exports = async (req, res) => {
     };
     const avgParts = [record.taste, record.service, record.wait, record.overall].filter((v) => typeof v === 'number');
     record.experienceIndex = avgParts.length ? +(avgParts.reduce((a, b) => a + b, 0) / avgParts.length).toFixed(2) : null;
-    record.sentiment = sentimentScore(record.favouriteItem, record.improvements);
+    const sentimentResult = sentimentScore(record.favouriteItem, record.improvements);
+    record.sentiment = sentimentResult.score;
 
     await appendSubmission(record);
 
